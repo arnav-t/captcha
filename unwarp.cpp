@@ -8,7 +8,7 @@ const int maxShift = 5;
 const int maxShift2 = 1;
 const int horWidth = 2;
 const int verWidth = 2;
-const int areaThresMin = 70;
+const int areaThresMin = 20;
 const int areaThresMax = 5000;
 
 using namespace std;
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
 	imgUW = removeHorizontalLines(imgUW, 1);
 	imgUW = removeHorizontalLines(imgUW, img.cols - 2);
 	
-	Mat k = getStructuringElement(MORPH_RECT, Size(3,2));
+	Mat k = getStructuringElement(MORPH_RECT, Size(2,2));
 	dilate(imgUW, imgUW, k, Point(-1,-1));
 	erode(imgUW, imgUW, k, Point(-1,-1));
 
