@@ -8,7 +8,7 @@ const int maxShift = 5;
 const int maxShift2 = 1;
 const int horWidth = 2;
 const int verWidth = 2;
-const int areaThresMin = 20;
+const int areaThresMin = 30;
 const int areaThresMax = 5000;
 
 using namespace std;
@@ -232,16 +232,16 @@ int main(int argc, char *argv[])
 	//imshow("Original",img);
 	threshold(img, img, 128, 255, THRESH_BINARY);
 	imgUW = warpX(img, imgUW);
-	imgUW = warpY(img, imgUW);
+	imgUW = warpY(imgUW, imgUW);
 	//GaussianBlur(imgUW, imgUW, Size(5,5), 0.1);
 	threshold(imgUW, imgUW, 128, 255, THRESH_BINARY);
-	Mat imgTemp;
-	/*Mat kH = getStructuringElement(MORPH_RECT, Size(10,1));
+	/*Mat imgTemp;
+	Mat kH = getStructuringElement(MORPH_RECT, Size(10,1));
 	Mat kV = getStructuringElement(MORPH_RECT, Size(1,10));
 	dilate(imgUW, imgTemp, kV, Point(-1,-1));
 	erode(imgUW, imgTemp, kV, Point(-1,-1));
-	imshow("Vertical", imgTemp);
-	waitKey(1);
+	//imshow("Vertical", imgTemp);
+	//waitKey(1);
 	for(int x = 0; x < imgTemp.cols; ++x)
 	{
 		if(img.at<uchar>(0,x) <= 128)
@@ -253,8 +253,8 @@ int main(int argc, char *argv[])
 	}
 	dilate(imgUW, imgTemp, kH, Point(-1,-1));
 	erode(imgUW, imgTemp, kH, Point(-1,-1));
-	imshow("Horizontal", imgTemp);
-	waitKey(1);
+	//imshow("Horizontal", imgTemp);
+	//waitKey(1);
 	for(int y = 0; y < imgTemp.rows; ++y)
 	{
 		if(img.at<uchar>(y,0) <= 128)
@@ -265,10 +265,10 @@ int main(int argc, char *argv[])
 			}
 	}
 	//medianBlur(imgUW, imgUW, 3);*/
-	imgUW = removeVerticalLines(imgUW, 1);
-	imgUW = removeVerticalLines(imgUW, img.rows - 2);
-	imgUW = removeHorizontalLines(imgUW, 1);
-	imgUW = removeHorizontalLines(imgUW, img.cols - 2);
+	imgUW = removeVerticalLines(imgUW, 3);
+	imgUW = removeVerticalLines(imgUW, img.rows - 4);
+	imgUW = removeHorizontalLines(imgUW, 3);
+	imgUW = removeHorizontalLines(imgUW, img.cols - 4);
 	
 	Mat k = getStructuringElement(MORPH_RECT, Size(2,2));
 	dilate(imgUW, imgUW, k, Point(-1,-1));
