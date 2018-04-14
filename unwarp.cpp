@@ -149,12 +149,15 @@ int main(int argc, char *argv[])
 	Mat img = imread(IMG, 0);
 	Mat imgUW = imread(IMG,0);
 	if(argc == 2)
+	{
 		img = imread(argv[1], 0);
+		imgUW = imread(argv[1], 0);
+	}
 	imshow("Original",img);
 	threshold(img, img, 128, 255, THRESH_BINARY);
 	imgUW = warpX(img, imgUW);
 	imgUW = warpY(img, imgUW);
-	//GaussianBlur(imgUW, imgUW, Size(3,3), 0.1);
+	//GaussianBlur(imgUW, imgUW, Size(5,5), 0.1);
 	//medianBlur(imgUW, imgUW, 3);
 	imshow("Unwarped",imgUW);
 	waitKey(0);
