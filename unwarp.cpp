@@ -72,7 +72,7 @@ Mat shiftCol(Mat img, int x, int shift)
 }
 
 
-Mat warpX(Mat img)
+Mat warpX(Mat img, Mat imgUW)
 {
 	int topX; 
 	for(int x = img.cols-1; x >= 0; --x)
@@ -103,18 +103,59 @@ Mat warpX(Mat img)
 					break;
 				}
 		}
-		img = shiftRow(img, y, currentX - topX);
+		img = shiftRow(imgUW, y, currentX - topX);
 	}
-	return img;
+	return imgUW;
+}
+
+Mat warpY(Mat img, Mat imgUW)
+{
+	int topY; 
+	for(int y = 0; y < img.rows; ++y)
+	{
+		if(img.at<uchar>(y,img.cols - 1) <= 128)
+		{
+			topY = y;
+			break;
+		}
+		else if(y == img.rows-1)
+			return img;
+	}
+	int currentY = topY;
+	for(int x = img.cols - 1; x >= 0; --x)
+	{
+		for(int i = 0; i < maxShift; ++i)
+		{
+			if(currentY - i >= 0)
+				if(img.at<uchar>(currentY - i,x) <= 128)
+				{
+					currentY = currentY - i;
+					break;
+				}
+			if(currentY + i < img.rows)
+				if(img.at<uchar>(currentY + i,x) <= 128)
+				{
+					currentY = currentY + i;
+					break;
+				}
+		}
+		img = shiftCol(imgUW, x, currentY - topY);
+	}
+	return imgUW;
 }
 
 int main(int argc, char *argv[])
 {
 	Mat img = imread(IMG, 0);
+	Mat imgUW = imread(IMG,0);
 	if(argc == 2)
 		img = imread(argv[1], 0);
+	imshow("Original",img);
 	threshold(img, img, 128, 255, THRESH_BINARY);
-	img = warpX(img);
-	imshow("Lavda",img);
+	imgUW = warpX(img, imgUW);
+	imgUW = warpY(img, imgUW);
+	//GaussianBlur(imgUW, imgUW, Size(3,3), 0.1);
+	//medianBlur(imgUW, imgUW, 3);
+	imshow("Unwarped",imgUW);
 	waitKey(0);
 }
