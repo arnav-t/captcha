@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
 	imgUW = removeHorizontalLines(imgUW, 3);
 	imgUW = removeHorizontalLines(imgUW, img.cols - 4);
 	
-	Mat k = getStructuringElement(MORPH_RECT, Size(2,2));
+	Mat k = getStructuringElement(MORPH_RECT, Size(1,2));
 	dilate(imgUW, imgUW, k, Point(-1,-1));
 	erode(imgUW, imgUW, k, Point(-1,-1));
 
