@@ -8,6 +8,8 @@ const int maxShift = 5;
 const int maxShift2 = 1;
 const int horWidth = 2;
 const int verWidth = 2;
+const int areaThresMin = 70;
+const int areaThresMax = 5000;
 
 using namespace std;
 using namespace cv;
@@ -268,11 +270,22 @@ int main(int argc, char *argv[])
 	imgUW = removeHorizontalLines(imgUW, 1);
 	imgUW = removeHorizontalLines(imgUW, img.cols - 2);
 
-	Mat k = getStructuringElement(MORPH_RECT, Size(2,2));
+	vector<Vec4i> hierarchy;
+	vector<vector<Point>> contours;
+	findContours(imgUW, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_NONE);	
+
+	imgUW = Scalar(255);
+	for(int i = 0; i < contours.size(); ++i)
+	{
+		if(contourArea(contours[i]) >= areaThresMin && contourArea(contours[i]) < areaThresMax)
+			drawContours(imgUW, contours, i, Scalar(0),CV_FILLED,CV_AA,hierarchy);
+	}
+
+	/*Mat k = getStructuringElement(MORPH_RECT, Size(2,2));
 	dilate(imgUW, imgUW, k, Point(-1,-1));
 	erode(imgUW, imgUW, k, Point(-1,-1));
 	
-	/*k = getStructuringElement(MORPH_RECT, Size(3,3));
+	k = getStructuringElement(MORPH_RECT, Size(3,3));
 	dilate(imgUW, imgUW, k, Point(-1,-1));
 	erode(imgUW, imgUW, k, Point(-1,-1));*/
 
