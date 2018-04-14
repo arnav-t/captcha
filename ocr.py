@@ -10,5 +10,6 @@ if __name__ == '__main__':
 
 os.system(os.getcwd() + '/unwarp ' + file)
 
+
 img = Image.open('result.jpeg')
-print(pyt.image_to_string(img))
+print(pyt.image_to_string(img, config='-psm 8 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'))

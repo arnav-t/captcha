@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
 		img = imread(argv[1], 0);
 		imgUW = imread(argv[1], 0);
 	}
-	imshow("Original",img);
+	//imshow("Original",img);
 	threshold(img, img, 128, 255, THRESH_BINARY);
 	imgUW = warpX(img, imgUW);
 	imgUW = warpY(img, imgUW);
@@ -269,6 +269,12 @@ int main(int argc, char *argv[])
 	imgUW = removeVerticalLines(imgUW, img.rows - 2);
 	imgUW = removeHorizontalLines(imgUW, 1);
 	imgUW = removeHorizontalLines(imgUW, img.cols - 2);
+	
+	Mat k = getStructuringElement(MORPH_RECT, Size(3,2));
+	dilate(imgUW, imgUW, k, Point(-1,-1));
+	erode(imgUW, imgUW, k, Point(-1,-1));
+
+	imwrite("preresult.jpeg",imgUW);
 
 	vector<Vec4i> hierarchy;
 	vector<vector<Point>> contours;
@@ -281,15 +287,13 @@ int main(int argc, char *argv[])
 			drawContours(imgUW, contours, i, Scalar(0),CV_FILLED,CV_AA,hierarchy);
 	}
 
-	/*Mat k = getStructuringElement(MORPH_RECT, Size(2,2));
-	dilate(imgUW, imgUW, k, Point(-1,-1));
-	erode(imgUW, imgUW, k, Point(-1,-1));
+	/*
 	
 	k = getStructuringElement(MORPH_RECT, Size(3,3));
 	dilate(imgUW, imgUW, k, Point(-1,-1));
 	erode(imgUW, imgUW, k, Point(-1,-1));*/
 
-	imshow("Unwarped",imgUW);
-	imwrite("temp.jpeg",imgUW);
+	//imshow("Unwarped",imgUW);
+	imwrite("result.jpeg",imgUW);
 	waitKey(0);
 }
